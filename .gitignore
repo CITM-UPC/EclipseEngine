@@ -398,4 +398,5 @@ FodyWeavers.xsd
 *.sln.iml
 
 # vcpkg_installed
-EclipseEngine/vcpkg_installed/
+vcpkg_installed/
+vcpkg/
