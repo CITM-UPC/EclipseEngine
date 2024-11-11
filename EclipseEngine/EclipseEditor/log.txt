@@ -1,0 +1,13 @@
+Initialized Engine
+Initialized GLFW corectly
+Initialized OpenGL corectly
+Image loaded: 
+Image loaded: 
+Image loaded: 
+Failed to load image: 
+Failed to load image: 
+Model loaded: 
+Assets/BakerHouse.FBX
+Failed to load image: 
+Model loaded: 
+Assets/SF_Fighter.FBX

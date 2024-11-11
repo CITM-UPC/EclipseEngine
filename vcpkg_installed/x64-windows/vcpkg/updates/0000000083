@@ -1,0 +1,7 @@
+Package: devil
+Feature: libpng
+Depends: libpng
+Architecture: x64-windows
+Multi-Arch: same
+Description: Use Libpng for .png (and some .ico)
+Status: install ok installed

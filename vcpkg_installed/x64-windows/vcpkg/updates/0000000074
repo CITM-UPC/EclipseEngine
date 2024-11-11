@@ -1,0 +1,7 @@
+Package: devil
+Feature: lcms
+Depends: lcms
+Architecture: x64-windows
+Multi-Arch: same
+Description: Use Little CMS for color profiles
+Status: install ok half-installed

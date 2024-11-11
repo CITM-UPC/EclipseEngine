@@ -1,0 +1,7 @@
+Package: devil
+Feature: openexr
+Depends: openexr
+Architecture: x64-windows
+Multi-Arch: same
+Description: Use openexr
+Status: install ok half-installed

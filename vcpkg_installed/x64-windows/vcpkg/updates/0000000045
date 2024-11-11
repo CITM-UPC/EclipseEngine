@@ -1,0 +1,9 @@
+Package: libdeflate
+Version: 1.20
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 74483daf23d17f1b4262ba89fb1970f5ab5d6ca89104ccaab364a846e02d968e
+Description: libdeflate is a library for fast, whole-buffer DEFLATE-based compression and decompression.
+Default-Features: compression, decompression, gzip, zlib
+Status: install ok installed

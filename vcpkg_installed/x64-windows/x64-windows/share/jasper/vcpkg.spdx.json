@@ -1,0 +1,176 @@
+{
+  "$schema": "https://raw.githubusercontent.com/spdx/spdx-spec/v2.2.1/schemas/spdx-schema.json",
+  "spdxVersion": "SPDX-2.2",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "documentNamespace": "https://spdx.org/spdxdocs/jasper-x64-windows-4.2.1-8726373f-8dff-4e48-b50c-ea89c56db80a",
+  "name": "jasper:x64-windows@4.2.1 8c009d4ebb79580c2ffb8ce641dc2481431ddbae41f1d9acbed4f0741853cb01",
+  "creationInfo": {
+    "creators": [
+      "Tool: vcpkg-2024-10-18-e392d7347fe72dff56e7857f7571c22301237ae6"
+    ],
+    "created": "2024-11-11T09:20:36Z"
+  },
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "GENERATES",
+      "relatedSpdxElement": "SPDXRef-binary"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-0"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-1"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-2"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-3"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-4"
+    },
+    {
+      "spdxElementId": "SPDXRef-binary",
+      "relationshipType": "GENERATED_FROM",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-0",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-1",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-2",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-3",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-4",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    }
+  ],
+  "packages": [
+    {
+      "name": "jasper",
+      "SPDXID": "SPDXRef-port",
+      "versionInfo": "4.2.1",
+      "downloadLocation": "git+https://github.com/microsoft/vcpkg@4c3bc011eb133f1203cd2c41da885725e7cc99e0",
+      "homepage": "https://github.com/jasper-software/jasper",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "description": "Open source implementation of the JPEG-2000 Part-1 standard",
+      "comment": "This is the port (recipe) consumed by vcpkg."
+    },
+    {
+      "name": "jasper:x64-windows",
+      "SPDXID": "SPDXRef-binary",
+      "versionInfo": "8c009d4ebb79580c2ffb8ce641dc2481431ddbae41f1d9acbed4f0741853cb01",
+      "downloadLocation": "NONE",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "comment": "This is a binary package built by vcpkg."
+    },
+    {
+      "SPDXID": "SPDXRef-resource-1",
+      "name": "jasper-software/jasper",
+      "downloadLocation": "git+https://github.com/jasper-software/jasper@version-4.2.1",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "checksums": [
+        {
+          "algorithm": "SHA512",
+          "checksumValue": "2da4b72e7566fb3f1240fe8e058f2801642d2a2a8bed6e89f1a32209d22d715bff811a99102ba2cfe0eb566f0fb2292bbefffe75a17011995e35ab8f6bc8a417"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "fileName": "./C:/Users/migueltg6/AppData/Local/vcpkg/registries/git-trees/4c3bc011eb133f1203cd2c41da885725e7cc99e0/check-for-atomics-support.patch",
+      "SPDXID": "SPDXRef-file-0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "3f49d2964db655e27a83ca5d941c33584ecdd8179659eb9099cecd6ac4b819ec"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/migueltg6/AppData/Local/vcpkg/registries/git-trees/4c3bc011eb133f1203cd2c41da885725e7cc99e0/fix-library-name.patch",
+      "SPDXID": "SPDXRef-file-1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "791664e7c66bfd4bf497454d47fe67d61e58a1ed7f1a7ae9cc4b8c18fde26ca2"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/migueltg6/AppData/Local/vcpkg/registries/git-trees/4c3bc011eb133f1203cd2c41da885725e7cc99e0/no_stdc_check.patch",
+      "SPDXID": "SPDXRef-file-2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "2170f3e0e4badd2061d666d29400aa5a3b183e8eca1532ec8d05888352f7bec9"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/migueltg6/AppData/Local/vcpkg/registries/git-trees/4c3bc011eb133f1203cd2c41da885725e7cc99e0/portfile.cmake",
+      "SPDXID": "SPDXRef-file-3",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f911d3a911d81a599b73cc8c138e4b01432c289d9bf571f9430f3adde7db5126"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/migueltg6/AppData/Local/vcpkg/registries/git-trees/4c3bc011eb133f1203cd2c41da885725e7cc99e0/vcpkg.json",
+      "SPDXID": "SPDXRef-file-4",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "681aca2bb1b7cf78c863cab89d9955ec9f7d52e20113ee293d329d6c45e71776"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    }
+  ]
+}

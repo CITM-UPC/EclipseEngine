@@ -1,0 +1,7 @@
+Package: devil
+Feature: jasper
+Depends: jasper
+Architecture: x64-windows
+Multi-Arch: same
+Description: Use JasPer for .jp2 (and some .icns) support
+Status: install ok half-installed

@@ -1,0 +1,7 @@
+Package: devil
+Feature: libjpeg
+Depends: libjpeg-turbo
+Architecture: x64-windows
+Multi-Arch: same
+Description: Use Libjpeg for .jpg (and some .blp) support
+Status: install ok half-installed

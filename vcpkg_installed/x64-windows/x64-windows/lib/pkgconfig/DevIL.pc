@@ -1,0 +1,13 @@
+prefix=${pcfiledir}/../..
+exec_prefix=${prefix}
+includedir=${prefix}/include
+libdir=${exec_prefix}/lib
+
+Name: DevIL
+Description: Developer's Image Library - DevIL part (just image load/save)
+Version: 
+URL: http://openil.sourceforge.net
+Cflags: "-I${includedir}"
+Libs: "-L${libdir}" -lDevIL
+
+

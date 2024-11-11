@@ -1,0 +1,10 @@
+Package: devil
+Version: 1.8.0
+Port-Version: 13
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: b68b03d235c9fa48a72372eda7b0ed61ccc40cfcb55a86beb76ccae65c97d2bc
+Description: A full featured cross-platform image library
+Default-Features: jasper, lcms, libjpeg, libpng, openexr, tiff
+Status: install ok installed

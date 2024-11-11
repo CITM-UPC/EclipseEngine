@@ -1,0 +1,8 @@
+Package: lcms
+Version: 2.14
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 1effb249af58911f567db31cb209edafc5107c43e66fc62d447fe75d49381056
+Description: Little CMS.
+Status: install ok half-installed

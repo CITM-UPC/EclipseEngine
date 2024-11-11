@@ -1,0 +1,7 @@
+Package: devil
+Feature: tiff
+Depends: tiff
+Architecture: x64-windows
+Multi-Arch: same
+Description: Use Libtiff for .tif support
+Status: install ok installed
