@@ -1,0 +1,7 @@
+{
+  "meshes": [
+    "Library/emesh/Stwart_mesh_stw_anim_body_geo10.emesh",
+    "Library/emesh/Stwart_mesh_stw_anim_hair_geo10.emesh",
+    "Library/emesh/Stwart_mesh_stw_anim_eyes_geo10.emesh"
+  ]
+}

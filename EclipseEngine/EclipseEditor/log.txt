@@ -1,0 +1,7 @@
+Initialized GLFW corectly
+Initialized OpenGL corectly
+Image loaded: 
+Image loaded: 
+Failed to load image: 
+Failed to load image: 
+Model loaded: 

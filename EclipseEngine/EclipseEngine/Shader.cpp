@@ -1,4 +1,5 @@
 #include "Shader.h"
+#include "Logger.h"
 
 std::string get_file_contents(const char* filename)
 {

@@ -1,0 +1,20 @@
+{
+  "dependencies": [
+    "assimp",
+    "devil",
+    "glew",
+    "glfw3",
+    "glm",
+    {
+      "name": "imgui",
+      "features": [
+        "docking-experimental",
+        "glfw-binding",
+        "opengl3-binding"
+      ]
+    },
+    "imguizmo",
+    "openssl",
+    "nlohmann-json"
+  ]
+}
