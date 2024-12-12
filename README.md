@@ -16,6 +16,18 @@ This team is composed by:
   - Assets window that shows all assets.
   - The user can drop/import new files and the assets panel.
   - Asset files can be renamed and deleted through the panel.
+ 
+## Extra Features 
+- Change use of **shader** rendering settings.
+- Functional transformation **buttons** in the viewport:
+  - **Translate**
+  - **Rotation**
+  - **Scale**
+  - Switch between **Local & Global** transforms.
+- Game Objects **AABB** visual.
+- Viewport and Game Panel separated.
+- Panels are dockable and can be separated outside the window.
+
 
 ## Key Functionalities
 - **File Handling**:
