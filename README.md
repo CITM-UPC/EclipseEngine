@@ -1,6 +1,8 @@
 # EclipseEngine
 A 3D game engine made from scratch by 4 university students for the Game Engines subject.
 
+![demo2](https://github.com/user-attachments/assets/5090b320-c296-4dca-992d-bb50cdcd8e89)
+
 ## The Team
 This team is composed by:
 - **Marc San José**: [https://github.com/marcsjm19](https://github.com/marcsjm19)
@@ -16,15 +18,27 @@ This team is composed by:
   - Assets window that shows all assets.
   - The user can drop/import new files and the assets panel.
   - Asset files can be renamed and deleted through the panel.
- 
+ ![AssetsPanel](https://github.com/user-attachments/assets/40e300e9-ca6c-48b4-97a0-27056d7cb263)
+![AssetsPanel2](https://github.com/user-attachments/assets/4e399d2e-4bee-4c55-9188-a94968b30d34)
+
 ## Extra Features 
-- Change use of **shader** rendering settings.
+- Change use of **shader** rendering settings:
+  - "O" for **default** render.
+  - "P" for **position** shader.![PositionTest](https://github.com/user-attachments/assets/88b10285-f49c-42ce-96c1-178a66add9f6)
+
+  - "I" for **depth** shader.![DepthTest2](https://github.com/user-attachments/assets/15c04910-e1dc-49be-ae50-681baae193fc)
+
+  - "U" for **normals** shader. ![NormalsTest2](https://github.com/user-attachments/assets/1fcbba51-976c-42af-8c3a-a1a8fc72956f)
+
 - Functional transformation **buttons** in the viewport:
   - **Translate**
   - **Rotation**
   - **Scale**
   - Switch between **Local & Global** transforms.
+  - ![TransformButtons](https://github.com/user-attachments/assets/89dc7aa6-ecd9-4fe8-a9d6-fc96088851a0)
+
 - Game Objects **AABB** visual.
+- Outlining Selected objects.
 - Viewport and Game Panel separated.
 - Panels are dockable and can be separated outside the window.
 
