@@ -15,8 +15,6 @@ public:
 	HierarchyPanel(const std::string& name, bool isVisible = false);
 
 	void Render() override;
-	void RemoveObject(std::shared_ptr<GameObject> rootObject);
-	void AddRootObject(std::shared_ptr<GameObject> rootObject);
 	std::shared_ptr<GameObject> GetSelectedObject() const { return m_SelectedObject; }
 	void SetInspectorPanel(InspectorPanel* inspectorPanel) { m_InspectorPanel = inspectorPanel; }
 	void SetViewportPanel(ViewportPanel* viewportPanel) { m_ViewportPanel = viewportPanel; }

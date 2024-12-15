@@ -26,7 +26,7 @@ std::shared_ptr<GameObject> ModelLoader::LoadModel(const std::string& path) {
         ProcessNode(scene->mRootNode->mChildren[i], scene, model);
     }
 
-    return std::move(model);
+    return model;
 }
 
 std::shared_ptr<GameObject> ModelLoader::ProcessNode(aiNode* node, const aiScene* scene, std::shared_ptr<GameObject>& parent) {
@@ -129,34 +129,34 @@ void ModelLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene,
         }
     }
 
-    // Process textures
-    //if (mesh->mMaterialIndex >= 0) {
-    //    aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-    //    textures = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "diffuse");
-    //}
+     //Process textures
+    if (mesh->mMaterialIndex >= 0) {
+        aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+        textures = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "diffuse");
+    }
 }
 
-//std::vector<Texture> ModelLoader::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, const std::string& typeName)
-//{
-//    std::vector<Texture> textures;
-//    std::set<std::string> loadedTextures; // To track loaded texture paths
-//
-//    for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
-//    {
-//        aiString str; // For texture file path
-//        mat->GetTexture(type, i, &str);
-//
-//        // Check if texture is already loaded
-//        if (loadedTextures.find(str.C_Str()) != loadedTextures.end())
-//        {
-//            continue; // Skip if already loaded
-//        }
-//
-//        // Load the texture and add it to the vector
-//        Texture texture(str.C_Str(), typeName, textures.size(), GL_RGBA, GL_UNSIGNED_BYTE);
-//        textures.push_back(texture);
-//        loadedTextures.insert(str.C_Str()); // Track the loaded texture path
-//    }
-//    return textures;
-//}
-//
+std::vector<Texture> ModelLoader::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, const std::string& typeName)
+{
+    std::vector<Texture> textures;
+    std::set<std::string> loadedTextures; // To track loaded texture paths
+
+    for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
+    {
+        aiString str; // For texture file path
+        mat->GetTexture(type, i, &str);
+
+        // Check if texture is already loaded
+        if (loadedTextures.find(str.C_Str()) != loadedTextures.end())
+        {
+            continue; // Skip if already loaded
+        }
+
+        // Load the texture and add it to the vector
+        Texture texture(str.C_Str(), typeName, textures.size(), GL_RGBA, GL_UNSIGNED_BYTE);
+        textures.push_back(texture);
+        loadedTextures.insert(str.C_Str()); // Track the loaded texture path
+    }
+    return textures;
+}
+

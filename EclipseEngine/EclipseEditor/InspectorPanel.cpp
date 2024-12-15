@@ -1,5 +1,6 @@
 #include "imgui.h"
 #include "glm/glm.hpp"
+#include "App.h"
 #include "InspectorPanel.h"
 #include "tinyfiledialogs.h"
 
@@ -17,7 +18,7 @@ void InspectorPanel::Render()
 
         if(ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None))
         {   
-            if (m_SelectedObject)
+            if (m_SelectedObject != nullptr)
             {
                 // Display the name of the selected object
                 ImGui::Text("Selected Object: %s", m_SelectedObject->GetName().c_str());
@@ -27,8 +28,7 @@ void InspectorPanel::Render()
                 // Render Transform controls (you already have this implemented)
                 if (ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None))
                 {
-                    ImGui::Text("Transform");
-                    ImGui::Separator();
+                    ImGui::Text("TRANSFORM");
 
                     // Position
                     glm::vec3 position = m_SelectedObject->transform.position;
@@ -53,43 +53,97 @@ void InspectorPanel::Render()
                         m_SelectedObject->transform.SetRotation(rotationQuat);
                     }
 
-
-                    ImGui::Separator();
-                    (ImGui::Text("Mesh"));
-                    ImGui::Separator();
-                    bool temp = false;
-                    ImGui::Checkbox("Active", &temp);
-                    ImGui::SameLine();
-                    ImGui::Text("File: ");
-                    ImGui::Separator();
-                    ImGui::Text("Draw:");
-                    // Display the texture
-                    GLuint textureID = m_SelectedObject.get()->GetTextureID();
-                    if (textureID) {
-                        ImGui::Image((void*)(intptr_t)textureID, ImVec2(128, 128)); // Adjust size as needed
+                    // Add Component button with selection menu
+                    if (ImGui::Button("Add Component"))
+                    {
+                        ImGui::OpenPopup("AddComponentPopup");
                     }
-                    //ImGui::Checkbox("Vertex Normals", &temp);
-                    //ImGui::Checkbox("Face Normals", &temp);
-                    //ImGui::SameLine();
-                    //ImGui::Separator();
-                    //ImGui::Text("Indexes: ");
-                    //ImGui::Text("Normals: ");
-                    //ImGui::Text("Vertexs: ");
-                    //ImGui::Text("Faces: ");
-                    //ImGui::Text("Tex coords: ");
-                    //ImGui::Separator();
-                    //ImGui::SliderFloat("Normals length", nullptr, 0.000f, 1.000f);
-                    ImGui::Separator();
 
+                    if (ImGui::BeginPopup("AddComponentPopup"))
+                    {
+                        if (ImGui::MenuItem("Mesh"))
+                        {
+                            //m_SelectedObject->AddComponent<Mesh>();
+                        }
+                        if (ImGui::MenuItem("Material"))
+                        {
+                            //m_SelectedObject->AddComponent<Material>();
+                        }
+                        if (ImGui::MenuItem("Camera"))
+                        {
+                            m_SelectedObject->AddComponent<Camera>(1500, 844, m_SelectedObject->transform.position);
+                        }
+                        ImGui::EndPopup();
+                    }
+
+                    ImGui::SameLine(0.0f, 1.0f);
+					if (m_SelectedObject->components.size() > 0)
+					{
+                        // Remove Component button with selection menu
+                        if (ImGui::Button("Remove Component"))
+                        {
+                            ImGui::OpenPopup("RemoveComponentPopup");
+                        }
+					} 
+
+                    if (ImGui::BeginPopup("RemoveComponentPopup"))
+                    {
+                        if (m_SelectedObject->GetComponent<Mesh>() && ImGui::MenuItem("Mesh"))
+                        {
+                            m_SelectedObject->RemoveComponent<Mesh>();
+                        }
+                        if (m_SelectedObject->GetComponent<Material>() && ImGui::MenuItem("Material"))
+                        {
+                            m_SelectedObject->RemoveComponent<Material>();
+                        }
+                        if (m_SelectedObject->GetComponent<Camera>() && ImGui::MenuItem("Camera"))
+                        {
+                            m_SelectedObject->RemoveComponent<Camera>();
+                        }
+                        ImGui::EndPopup();
+                    }
+
+                    if (m_SelectedObject->GetComponent<Mesh>()) {
+                        ImGui::Separator();
+                        (ImGui::Text("MESH"));
+                        bool temp = true;
+                        ImGui::Checkbox("Active", &temp);
+						ImGui::Text("Vertices: %d", m_SelectedObject->GetComponent<Mesh>()->vertices.size());
+                        ImGui::SameLine(0, 20);
+						ImGui::Text("Indices: %d", m_SelectedObject->GetComponent<Mesh>()->indices.size());
+                    }
+
+                    if (m_SelectedObject->GetComponent<Material>()) {
+                        ImGui::Separator();
+                        (ImGui::Text("MATERIAL"));
+
+                        (ImGui::Text("Texture Preview:"));
+                        // Display the texture
+                        GLuint textureID = m_SelectedObject.get()->GetTextureID();
+                        if (textureID) {
+                            ImGui::Image((void*)(intptr_t)textureID, ImVec2(256, 256));
+                        }
+                    }
+
+                    if (m_SelectedObject->GetComponent<Camera>()) {
+						if (ImGui::Checkbox("Active", &m_SelectedObject->GetComponent<Camera>()->mainCamera)) {
+							core->scene->SetActiveCamera(m_SelectedObject->GetComponent<Camera>());
+                        }
+						if (ImGui::SliderFloat("FOV", &m_SelectedObject->GetComponent<Camera>()->FOVdeg, 1.0f, 179.0f))
+						{
+							//m_SelectedObject->GetComponent<Camera>()->UpdateProjectionMatrix();
+						}
+                        if (ImGui::SliderFloat("Near Plane", &m_SelectedObject->GetComponent<Camera>()->nearPlane, 0.1f, 100.0f));
+						if (ImGui::SliderFloat("Far Plane", &m_SelectedObject->GetComponent<Camera>()->farPlane, 0.1f, 100.0f));
+                    }
                     ImGui::Separator();
-                    (ImGui::Text("Material"));
-                    ImGui::Separator();
-                    bool temp1;
-                    ImGui::Checkbox("Active", &temp1);
+                    if (ImGui::Button("Delete Object")) {
+                        core->scene->DeleteGameObject(m_SelectedObject);
+                        m_SelectedObject = nullptr;
+                    }
 
                     ImGui::EndTabBar();
                 }
-
             }
             else
             {

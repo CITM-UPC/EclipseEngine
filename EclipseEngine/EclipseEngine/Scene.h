@@ -20,7 +20,9 @@ public:
 	Camera* GetActiveCamera() const { return activeCamera; }
 
 	void AddGameObject(std::shared_ptr<GameObject> go);
-	void SetActiveCamera(Camera camera);
+	void AddEmptyGameObject();
+	void SetActiveCamera(Camera* camera);
+	void DeleteGameObject(const std::shared_ptr<GameObject>& go);
 
 	void AddCube();
 

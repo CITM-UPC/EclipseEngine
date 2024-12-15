@@ -51,13 +51,14 @@ void EditorRenderer::Render(Scene* scene, Camera* editorCamera, std::shared_ptr<
 {
 	if (!scene) return;
 
+	// Normal object rendering
+	glStencilFunc(GL_ALWAYS, 1, 0xFF); // Write 1 to the stencil buffer for all objects
+	glStencilMask(0xFF); // Enable writing to the stencil buffer
+
 	for (auto& object : scene->GetObjects())
 	{
-		// Normal object rendering
-		glStencilFunc(GL_ALWAYS, 1, 0xFF); // Write 1 to the stencil buffer for all objects
-		glStencilMask(0xFF); // Enable writing to the stencil buffer
-
 		glm::mat4 identity = object->transform.GetMatrix();
+		object->UpdateAABB(glm::mat4(1.0f));
 		if (glfwGetKey(core->window->GetWindow(), GLFW_KEY_P) == GLFW_PRESS)
 		{
 			optionShader = posShader;
@@ -77,29 +78,29 @@ void EditorRenderer::Render(Scene* scene, Camera* editorCamera, std::shared_ptr<
 			optionShader = normalShader;
 		}
 		object->Draw(*optionShader, *editorCamera, identity);
-		RenderAABB(object->GetAABB(), *aabbShader);
 		for (auto& child : object->GetChildren())
 		{
 			RenderAABB(child->GetAABB(), *aabbShader);
 		}
-
-		if (selectedObject != nullptr)
-		{
-			glm::mat4 objectModel = selectedObject->CalculateWorldTransform(selectedObject->transform.GetMatrix());
-
-			// Outlining: Second pass (draw outline)
-			glStencilFunc(GL_NOTEQUAL, 1, 0xFF); // Only draw where stencil buffer is not 1
-			glStencilMask(0x00); // Disable writing to the stencil buffer
-			glDisable(GL_DEPTH_TEST); // Disable depth testing for stencil write
-
-			selectedObject->Draw(*outliningShader, *editorCamera, identity); // Draw outline
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Reset to fill mode
-		}
-
-		glStencilMask(0xFF); // Re-enable writing to stencil buffer for next frame
-		glStencilFunc(GL_ALWAYS, 1, 0xFF); // Reset stencil function
-		glEnable(GL_DEPTH_TEST); // Re-enable depth testing
 	}
+
+	if (selectedObject != nullptr)
+	{
+		// Calculate the world transform for the selected object
+		glm::mat4 worldTransform = glm::mat4(1.0f);
+
+		// Outlining: Second pass (draw outline)
+		glStencilFunc(GL_NOTEQUAL, 1, 0xFF); // Only draw where stencil buffer is not 1
+		glStencilMask(0x00); // Disable writing to the stencil buffer
+		glDisable(GL_DEPTH_TEST); // Disable depth testing for stencil write
+
+		selectedObject->Draw(*outliningShader, *editorCamera, selectedObject->transform.GetMatrix()); // Draw outline
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Reset to fill mode
+	}
+
+	glStencilMask(0xFF); // Re-enable writing to stencil buffer for next frame
+	glStencilFunc(GL_ALWAYS, 1, 0xFF); // Reset stencil function
+	glEnable(GL_DEPTH_TEST); // Re-enable depth testing
 
 	RenderGrid(grid, editorCamera);
 	RenderGuizmo();

@@ -1,5 +1,6 @@
-#include "GameObject.h"
 #define STB_IMAGE_IMPLEMENTATION
+
+#include "GameObject.h"
 #include <stb_image.h>
 #include <iostream>
 
@@ -15,28 +16,20 @@ GameObject::~GameObject()
 
 void GameObject::Update()
 {
-    // placeholder for Update
-}
-
-// Compute world transform
-glm::mat4 GameObject::CalculateWorldTransform(const glm::mat4& parentTransform) const {
-
-	if (parent)
-	{
-		return parentTransform * transform.GetMatrix(); // Combine parent's and local transform
-	}
-    else {
-
-    return transform.GetMatrix();
+    // Update the current GameObject
+    for (auto& component : components) {
+        component->Update();
     }
 }
 
-void GameObject::UpdateChildrenTransforms()
+// Compute world transform
+glm::mat4 GameObject::CalculateWorldTransform(const glm::mat4& parentTransform) const 
 {
-	for (const auto& child : children) {
-		child->transform.SetMatrix(CalculateWorldTransform(child->parent->transform.GetMatrix()));
-		child->UpdateChildrenTransforms();
-	}
+	if (parent){
+		return parent->CalculateWorldTransform(parentTransform) * transform.GetMatrix(); // Combine parent's and local transform
+	} else {
+        return transform.GetMatrix();
+    }
 }
 
 void GameObject::Draw(Shader& shader, Camera& camera, const glm::mat4& parentTransform)
@@ -45,22 +38,15 @@ void GameObject::Draw(Shader& shader, Camera& camera, const glm::mat4& parentTra
     glm::mat4 objectModel = CalculateWorldTransform(parentTransform); // Get the transformation matrix from Transform
 
     // Activate the shader program
-    if(!material)
-    { 
-        std::vector<Texture> defaultTex{ Texture("Resources/Assets/Textures/default.png","diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE) };
-        this->AddComponent<Material>(defaultTex); // Add a default material if none exists
-    }
-
     shader.Activate();
 	shader.SetMat4("model", objectModel);
     shader.SetFloat("outlining", 1.05f);
-
-    if(material) material.get()->BindTextures(shader); // If it has material, bind it
-    if (mesh) mesh->Draw(shader, camera);   // Code to draw the game object (calls Draw on the mesh if it exists)
+    
+	if (Material* material = GetComponent<Material>()) material->BindTextures(shader);
+    if (Mesh* mesh = GetComponent<Mesh>()) mesh->Draw(shader, camera);
 
     for (const auto& child : children) {
-		glm::mat4 childModel = CalculateWorldTransform(parentTransform);
-        child->Draw(shader, camera, childModel);
+        child->Draw(shader, camera, objectModel);
     }
 }
 
@@ -70,11 +56,6 @@ void GameObject::SetTexture(const std::string& texturePath)
         currentTexturePath = texturePath;
         UpdateTexture(texturePath);
     }
-}
-
-GLuint GameObject::GetTextureID() const
-{
-	return textureID;
 }
 
 void GameObject::LoadTexture(const std::string& texturePath)
@@ -98,9 +79,9 @@ void GameObject::UpdateTexture(const std::string& texturePath)
     LoadTexture(texturePath);
 }
 
-AABB GameObject::GetAABB() const {
+AABB GameObject::GetAABB(){
     AABB worldAABB;
-    if (mesh) {
+    if (Mesh* mesh = GetComponent<Mesh>()) {
         worldAABB = mesh->GetWorldAABB(transform.GetMatrix());
     }
     for (const auto& child : children) {
@@ -108,4 +89,27 @@ AABB GameObject::GetAABB() const {
         worldAABB.Expand(child->GetAABB().max);
     }
     return worldAABB;
+}
+
+void GameObject::UpdateAABB(const glm::mat4& parentTransform)
+{
+    if (auto mesh = GetComponent<Mesh>()) {
+        localAABB = mesh->GetWorldAABB(parentTransform);
+    }
+
+    for (const auto& child : children) {
+        child->UpdateAABB(CalculateWorldTransform(parentTransform));
+    }
+}
+
+void GameObject::DeleteAllComponents() {
+    components.clear();
+}
+
+void GameObject::DeleteAllChildren() {
+    for (auto& child : children) {
+        child->DeleteAllComponents();
+        child->DeleteAllChildren();
+    }
+    children.clear();
 }

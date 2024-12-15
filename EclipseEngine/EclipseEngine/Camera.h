@@ -14,13 +14,13 @@
 #include "Shader.h"
 #include "Component.h"
 
-class Camera 
+class Camera : public Component
+
 {
 public:
 	Camera(int widht, int height, glm::vec3 position);
 
-	//void Update() override;
-
+	void Update() override;
 	void UpdateMatrix(float nearPlane, float farPlane);
 	void Matrix(Shader& shader, const char* uniform);
 	void Inputs(GLFWwindow* window); //C
@@ -29,6 +29,9 @@ public:
 	// Static scroll callback function
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset); //C
 	glm::vec3 GetRaycastHitPoint(GLFWwindow* window);
+
+	void UpdatePositionFromOwner();
+	void UpdateOrientationFromOwner();
 
 public:
 	glm::vec3 Position;                                       // Camera's position
@@ -43,6 +46,7 @@ public:
 	int height;
 	float nearPlane;
 	float farPlane;
+	bool mainCamera = false;
 
 	float speed = 0.1f; //C
 	float sensitivity = 100.0f; //C

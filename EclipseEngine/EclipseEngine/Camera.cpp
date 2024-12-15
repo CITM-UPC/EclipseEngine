@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include "GameObject.h"
 #include "Logger.h"
 
 float Camera::scrollOffset = 0.0f;  // Initialize static scroll offset
@@ -8,6 +9,12 @@ Camera::Camera(int _width, int _height, glm::vec3 _position)
 	Camera::width = _width;
 	Camera::height = _height;
 	Position = _position;
+}
+
+void Camera::Update()
+{
+    UpdatePositionFromOwner();
+    UpdateOrientationFromOwner();
 }
 
 void Camera::UpdateMatrix(float nearPlane, float farPlane)
@@ -23,6 +30,21 @@ void Camera::UpdateMatrix(float nearPlane, float farPlane)
 void Camera::Matrix(Shader& shader, const char* uniform)
 {
 	glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(cameraMatrix));
+}
+
+void Camera::UpdatePositionFromOwner()
+{
+    if (GameObject* owner = GetOwner()) {
+        Position = owner->transform.position;
+    }
+}
+
+void Camera::UpdateOrientationFromOwner()
+{
+    if (GameObject* owner = GetOwner()) {
+        Orientation = owner->transform.rotation * glm::vec3(0.0f, 0.0f, 1.0f);
+        Up = owner->transform.rotation * glm::vec3(0.0f, 1.0f, 0.0f);
+    }
 }
 
 void Camera::Inputs(GLFWwindow* window)

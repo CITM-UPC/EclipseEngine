@@ -7,16 +7,15 @@
 #include "Material.h"
 #include "Mesh.h"
 #include "Texture.h"
+#include "Camera.h"
 #include "AABB.h"
 
-class Mesh; // Forward declaration
 class GameObject : public std::enable_shared_from_this<GameObject>
 {
 public:
     std::string name;
     Transform transform;
-    std::unique_ptr<Material> material; // Using unique_ptr for automatic memory management
-    std::unique_ptr<Mesh> mesh;         // Using unique_ptr for automatic memory management
+    std::vector<std::unique_ptr<Component>> components; // Store components
 
     // Parent reference (nullable)
     std::shared_ptr<GameObject> parent;
@@ -28,26 +27,29 @@ public:
 
     void Update();    // Update and draw the game object
     void Draw(Shader& shader, Camera& camera, const glm::mat4& parentTransform);
-    AABB GetAABB() const; // Returns the AABB in world space
 
     template<typename T, typename... Args>
-    void AddComponent(Args&&... args);    // Add a component to the game object
-    inline void AddChild(std::shared_ptr<GameObject> child);    // Add a child game object
-
+    T* AddComponent(Args&&... args);    // Add a component to the game object
     template<typename T>
-    T* GetComponent();    // Retrieve a component of a specific type
-    std::string GetName() const { return name; }
-    const std::list<std::shared_ptr<GameObject>>& GetChildren() const { return children; }    // Add a child game object
+    void RemoveComponent();             // Remove a component of a specific type
+    template<typename T>
+	T* GetComponent();                  // Get a component of a specific type
+    void DeleteAllComponents();
 
 	bool HasParent() const { return parent != nullptr; }
-    void UpdateChildrenTransforms();
+    inline void AddChild(std::shared_ptr<GameObject> child);    // Add a child game object
+    void DeleteAllChildren();
+    const std::list<std::shared_ptr<GameObject>>& GetChildren() const { return children; }    // Add a child game object
     glm::mat4 CalculateWorldTransform(const glm::mat4& parentTransform) const; // Helper to calculate world transform
 
-
+    std::string GetName() const { return name; }
+    AABB GetAABB(); // Returns the AABB in world space
+    void UpdateAABB(const glm::mat4& parentTransform);
     void SetTexture(const std::string& texturePath);
-    GLuint GetTextureID() const;
+    GLuint GetTextureID() const { return textureID; }
 
 private:
+    AABB localAABB;
     GLuint textureID;
     std::string currentTexturePath;
     void LoadTexture(const std::string& texturePath);
@@ -57,26 +59,31 @@ private:
 
 // Template member function definitions should go here as well
 template<typename T, typename... Args>
-void GameObject::AddComponent(Args&&... args) {
-    if constexpr (std::is_same<T, Mesh>::value) {
-        mesh = std::make_unique<Mesh>(std::forward<Args>(args)...);
-    }
-    else if constexpr (std::is_same<T, Material>::value) {
-        material = std::make_unique<Material>(std::forward<Args>(args)...);
-    }
-    // Add more components as needed
+T* GameObject::AddComponent(Args&&... args) {
+    static_assert(std::is_base_of<Component, T>::value, "T must be derived from Component");
+    auto component = std::make_unique<T>(std::forward<Args>(args)...);
+    component->SetOwner(this);
+    T* componentPtr = component.get();
+    components.push_back(std::move(component));
+    return componentPtr;
+}
+
+template<typename T>
+void GameObject::RemoveComponent() {
+    static_assert(std::is_base_of<Component, T>::value, "T must be derived from Component");
+    components.erase(std::remove_if(components.begin(), components.end(),
+        [](const std::unique_ptr<Component>& component) {
+            return dynamic_cast<T*>(component.get()) != nullptr;
+        }), components.end());
 }
 
 template<typename T>
 T* GameObject::GetComponent() {
-    if constexpr (std::is_same<T, Transform>::value) {
-        return &transform; // Return the address of the Transform
-    }
-    else if constexpr (std::is_same<T, Material>::value) {
-        return material.get(); // Return the raw pointer of the unique_ptr
-    }
-    else if constexpr (std::is_same<T, Mesh>::value) {
-        return mesh.get(); // Return the raw pointer of the unique_ptr
+    static_assert(std::is_base_of<Component, T>::value, "T must be derived from Component");
+    for (const auto& component : components) {
+        if (T* castedComponent = dynamic_cast<T*>(component.get())) {
+            return castedComponent;
+        }
     }
     return nullptr; // If no matching component, return nullptr
 }

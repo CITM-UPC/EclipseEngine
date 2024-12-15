@@ -12,15 +12,27 @@ Scene::~Scene()
 
 bool Scene::Initialize()
 {
-	activeCamera = new Camera(1500, 844, glm::vec3(7.0f, 4.0f, -7.0f));
-	auto initScene = modelLoader.LoadModel("Resources/Assets/fbx_files/Street/untitled.fbx");
-	AddGameObject(initScene);
+	//activeCamera = new Camera(1500, 844, glm::vec3(7.0f, 4.0f, -7.0f));
+	auto cameraGO = std::make_shared<GameObject>();
+	cameraGO->name = "Main Camera";
+	cameraGO->AddComponent<Camera>(1500, 844, glm::vec3(7.0f, 4.0f, -7.0f));
+	SetActiveCamera(cameraGO->GetComponent<Camera>());
+	AddGameObject(cameraGO);
+	//auto initScene = modelLoader.LoadModel("Resources/Assets/fbx_files/Street/untitled.fbx");
+	//AddGameObject(initScene);
 	return true;
 }
 
 bool Scene::Update(double dt)
 {
-	activeCamera->UpdateMatrix(0.1f, 100.0f);
+	if (activeCamera)
+	{
+		activeCamera->UpdateMatrix(0.1f, 100.0f);
+	}
+	for (auto& obj : gameObjects)
+	{
+		obj->Update();
+	}
     return true;
 }
 
@@ -38,9 +50,18 @@ void Scene::AddGameObject(std::shared_ptr<GameObject> go)
 	gameObjects.push_back(std::move(go));
 }
 
-void Scene::SetActiveCamera(Camera camera)
+void Scene::AddEmptyGameObject()
 {
-	activeCamera = &camera;
+	auto emptyGameObject = std::make_shared<GameObject>();
+	emptyGameObject->name = "Empty GameObject";
+	gameObjects.push_back(emptyGameObject);
+}
+
+
+void Scene::SetActiveCamera(Camera* camera)
+{
+	if (activeCamera != camera) 
+		activeCamera = camera;
 }
 
 void Scene::AddCube()
@@ -74,28 +95,21 @@ void Scene::AddCube()
 	};
 	std::vector<Texture> catTexture
 	{
-		Texture("Resources/Assets/Textures/checkerboard.png","diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
+		Texture("Resources/Assets/Textures/default.png","diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)
 	};
 
 	auto cube = std::make_shared<GameObject>(); // This has to be in the engine side (SCENE)
 	cube.get()->name = "cube";
 	cube->AddComponent<Mesh>(vertices, indices, catTexture);
-	cube->AddComponent<Material>( catTexture);
 	cube->transform.position = glm::vec3(0.0f, 0.0f, 0.0f);
 
-	auto cube2 = std::make_shared<GameObject>();
-	cube2.get()->name = "cube2";
-	cube2->AddComponent<Mesh>(vertices, indices, catTexture);
-	cube2->AddComponent<Material>(catTexture);
-	cube2->transform.position = glm::vec3(2.0f, 0.0f, 0.0f);
-
-	auto cube3 = std::make_shared<GameObject>();
-	cube3.get()->name = "cube2";
-	cube3->AddComponent<Mesh>(vertices, indices, catTexture);
-	cube3->AddComponent<Material>(catTexture);
-	
-	cube.get()->AddChild(cube2);
-	//cube.get()->AddChild(cube3);
 	AddGameObject(cube);
 	Logger::Log("Cube added to the scene");
+}
+
+void Scene::DeleteGameObject(const std::shared_ptr<GameObject>& go)
+{
+	go->DeleteAllComponents();
+	go->DeleteAllChildren();
+	gameObjects.remove(go);
 }

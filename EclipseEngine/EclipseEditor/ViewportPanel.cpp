@@ -97,6 +97,7 @@ void ViewportPanel::Render()
                     Logger::Log("Texture file dropped to selected object: " + std::string(filePath));
 					std::vector<Texture> textures{ Texture(filePath, "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE) };
 
+                    m_SelectedObject->RemoveComponent<Material>();
 					m_SelectedObject->AddComponent<Material>(textures);
                     // Display the texture
                     GLuint textureID = m_SelectedObject.get()->GetTextureID();
@@ -104,7 +105,6 @@ void ViewportPanel::Render()
                         ImGui::Image((void*)(intptr_t)textureID, ImVec2(128, 128)); // Adjust size as needed
                     }
 
-                    // Handle texture file loading
                 }
                 else
                 {

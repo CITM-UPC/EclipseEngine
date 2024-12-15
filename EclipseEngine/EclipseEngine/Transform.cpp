@@ -40,8 +40,7 @@ glm::mat4 Transform::GetMatrix() const
 
 glm::mat4 Transform::GetWorldMatrix(const glm::mat4& parentMatrix) const
 {
-    glm::mat4 localTransform = GetMatrix();
-    return parentMatrix * localTransform;
+    return parentMatrix * GetMatrix();
 }
 
 void Transform::SetMatrix(const glm::mat4& matrix)
@@ -100,5 +99,4 @@ glm::vec3 Transform::GetEulerAngles() const
 
 void Transform::Update()
 {
-    // If you need to do any updates before rendering, do it here
 }

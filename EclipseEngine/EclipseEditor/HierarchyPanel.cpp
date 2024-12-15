@@ -26,17 +26,35 @@ void HierarchyPanel::Render()
 		m_RootObjects = core->scene->GetObjects();
 	}
 
-    if(ImGui::Button("Add Object")) 
-    {
-		const char* filterPatterns[1] = { "*.fbx" };
-		const char* filePath = tinyfd_openFileDialog("Select Object", "", 1, filterPatterns, NULL, 0);
-		if (filePath) {
-			std::filesystem::path path(filePath);
-			ModelLoader modelLoader;
-			auto gameObject = modelLoader.LoadModel(filePath);
-			gameObject->name = path.stem().string();
-			core->scene->AddGameObject(gameObject);
+	if (ImGui::IsKeyPressed(ImGuiKey_MouseRight)
+	&& ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup))
+	{
+		ImGui::OpenPopup("AddObject");
+	}
+
+	if (ImGui::BeginPopup("AddObject"))
+	{
+		if (ImGui::MenuItem("Add Object"))
+		{
+			const char* filterPatterns[1] = { "*.fbx" };
+			const char* filePath = tinyfd_openFileDialog("Select Object", "", 1, filterPatterns, NULL, 0);
+			if (filePath) {
+				std::filesystem::path path(filePath);
+				ModelLoader modelLoader;
+				auto gameObject = modelLoader.LoadModel(filePath);
+				gameObject->name = path.stem().string();
+				core->scene->AddGameObject(gameObject);
+			}
 		}
+		if (ImGui::MenuItem("Add Empty GameObject"))
+		{
+			core->scene->AddEmptyGameObject();
+		}
+		if (ImGui::MenuItem("Add Cube"))
+		{
+			core->scene->AddCube();
+		}
+		ImGui::EndPopup();
 	}
 
 	for (const auto& rootObject : m_RootObjects) {
@@ -44,15 +62,6 @@ void HierarchyPanel::Render()
 	}
 	
 	ImGui::End();
-}
-
-void HierarchyPanel::RemoveObject(std::shared_ptr<GameObject> rootObject)
-{
-    // TODO: delete method
-}
-
-void HierarchyPanel::AddRootObject(std::shared_ptr<GameObject> rootObject) {
-	m_RootObjects.emplace_back(rootObject);
 }
 
 void HierarchyPanel::RenderGameObjectTree(const std::shared_ptr<GameObject>& gameObject) {
@@ -72,12 +81,10 @@ void HierarchyPanel::RenderGameObjectTree(const std::shared_ptr<GameObject>& gam
 			m_SelectedObject = gameObject;
 			Logger::Log("Selected object: " + gameObject->GetName());
 
-			if (m_InspectorPanel != nullptr)
-			{
+			if (m_InspectorPanel != nullptr) {
 				m_InspectorPanel->SetSelectedObject(m_SelectedObject);
 			}
-			if (m_ViewportPanel != nullptr)
-			{
+			if (m_ViewportPanel != nullptr) {
 				m_ViewportPanel->SetSelectedObject(m_SelectedObject);
 			}
         }

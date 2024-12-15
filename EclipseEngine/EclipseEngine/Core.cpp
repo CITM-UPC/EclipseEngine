@@ -9,7 +9,7 @@ Core::Core()
 	renderer = new Renderer(window);
 	scene = new Scene();
 
-    Logger::Log("Initialized Engine");
+    Logger::Log("Initializing Engine");
 }
 
 Core::~Core()
@@ -22,6 +22,7 @@ bool Core::Initialize()
     window->Initialize();
 	renderer->Initialize();
 	scene->Initialize();
+	Logger::Log("Initialized Engine");
     return true;
 }
 
