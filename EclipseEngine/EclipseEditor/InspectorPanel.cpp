@@ -133,8 +133,7 @@ void InspectorPanel::Render()
 						{
 							//m_SelectedObject->GetComponent<Camera>()->UpdateProjectionMatrix();
 						}
-                        if (ImGui::SliderFloat("Near Plane", &m_SelectedObject->GetComponent<Camera>()->nearPlane, 0.1f, 100.0f));
-						if (ImGui::SliderFloat("Far Plane", &m_SelectedObject->GetComponent<Camera>()->farPlane, 0.1f, 100.0f));
+                        RenderCameraSettings(m_SelectedObject->GetComponent<Camera>());
                     }
                     ImGui::Separator();
                     if (ImGui::Button("Delete Object")) {
@@ -157,4 +156,21 @@ void InspectorPanel::Render()
         ImGui::End();
     }
     
+}
+
+void InspectorPanel::RenderCameraSettings(Camera* camera)
+{
+    ImGui::Text("Camera Settings");
+
+    float nearPlane = camera->nearPlane;
+    if (ImGui::SliderFloat("Near Plane", &nearPlane, 0.01f, 10.0f))
+    {
+        camera->SetNearPlane(nearPlane);
+    }
+
+    float farPlane = camera->farPlane;
+    if (ImGui::SliderFloat("Far Plane", &farPlane, 10.0f, 1000.0f))
+    {
+        camera->SetFarPlane(farPlane);
+    }
 }

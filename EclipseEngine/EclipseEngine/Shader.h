@@ -22,6 +22,9 @@ public:
 
 	void SetMat4(const std::string& name, const glm::mat4& matrix) const { glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(matrix)); }
 	void SetFloat(const std::string& name, float value) { glUniform1f(glGetUniformLocation(ID, name.c_str()), value); }
+	void SetFloat4(const std::string& name, float v0, float v1, float v2, float v3) { glUniform4f(glGetUniformLocation(ID, name.c_str()), v0, v1, v2, v3); }
+	void SetInt(const std::string& name, int value) { glUniform1i(glGetUniformLocation(ID, name.c_str()), value); }
+	void SetVec3(const std::string& name, const glm::vec3& value) { glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]); }
 
 	GLuint ID;
 };

@@ -3,6 +3,9 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 
+#include <array>
+#include <iostream>
+
 #include <gl/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -24,7 +27,10 @@ public:
 	void UpdateMatrix(float nearPlane, float farPlane);
 	void Matrix(Shader& shader, const char* uniform);
 	void Inputs(GLFWwindow* window); //C
+	glm::mat4 GetViewMatrix() const { return glm::lookAt(Position, Position + Orientation, Up); }
 	glm::mat4 GetProjectionMatrix() { return projection; }
+	void SetNearPlane(float nearPlane);
+	void SetFarPlane(float farPlane);
 
 	// Static scroll callback function
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset); //C
@@ -53,6 +59,8 @@ public:
 	float FOVdeg = 45.0f;   // Field of View, adjustable for zoom
 
 	static float scrollOffset;  //C
+
+	std::array<glm::vec3, 8> GetFrustumVertices(float nearPlane, float farPlane) const;
 };
 
 #endif //CAMERA_H

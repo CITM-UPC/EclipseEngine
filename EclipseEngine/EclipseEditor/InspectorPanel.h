@@ -12,6 +12,7 @@ public:
     void Render() override;
 
     void SetSelectedObject(const std::shared_ptr<GameObject>& selectedObject) { m_SelectedObject = selectedObject; }
+    void RenderCameraSettings(Camera* camera);
 
 private:
 	std::shared_ptr<GameObject> m_SelectedObject = nullptr;

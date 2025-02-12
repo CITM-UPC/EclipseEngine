@@ -11,11 +11,12 @@
 
 #include "Grid.h"
 #include "Module.h"
+#include "App.h"
 
 class EditorRenderer : public Module
 {
 public:
-	EditorRenderer();
+	EditorRenderer(App* application);
 	~EditorRenderer();
 
 	bool Initialize() override;
@@ -30,6 +31,7 @@ private:
 	void RenderGrid(Grid* grid, Camera* editorCamera);
 	void RenderGuizmo();
 	void RenderAABB(AABB aabb, Shader& shader);
+	void DrawFrustum(const std::array<glm::vec3, 8>& frustumVertices, Shader& shader, const glm::mat4& view, const glm::mat4& projection);
 	//void RenderLight(Light* light); // no lights for now
 
 	Grid* grid = nullptr;
@@ -40,8 +42,10 @@ private:
 	Shader* normalShader = nullptr;
 	Shader* outliningShader = nullptr;
 	Shader* aabbShader = nullptr;
+	Shader* frustumShader = nullptr;
 
 	Shader* optionShader = nullptr;
+	App* app;
 };
 
 #endif // !EDITOR_RENDERER_H

@@ -202,6 +202,19 @@ void Camera::Inputs(GLFWwindow* window)
     }
 }
 
+void Camera::SetNearPlane(float nearPlane)
+{
+    this->nearPlane = nearPlane;
+    UpdateMatrix(nearPlane, farPlane);
+}
+
+void Camera::SetFarPlane(float farPlane)
+{
+    this->farPlane = farPlane;
+    UpdateMatrix(nearPlane, farPlane);
+}
+
+
 // Scroll callback function to adjust the zoom level
 void Camera::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
@@ -241,4 +254,27 @@ glm::vec3 Camera::GetRaycastHitPoint(GLFWwindow* window)
 
     // Return the intersection point
     return rayOrigin + rayWorld * t;
+}
+
+std::array<glm::vec3, 8> Camera::GetFrustumVertices(float nearPlane, float farPlane) const {
+    glm::mat4 invVP = glm::inverse(projection * glm::lookAt(Position, Position + Orientation, Up));
+
+    std::array<glm::vec3, 8> frustumVertices;
+    std::array<glm::vec4, 8> frustumVertices4 = {
+        invVP * glm::vec4(-1, -1, -1, 1),
+        invVP * glm::vec4(1, -1, -1, 1),
+        invVP * glm::vec4(1,  1, -1, 1),
+        invVP * glm::vec4(-1,  1, -1, 1),
+        invVP * glm::vec4(-1, -1,  1, 1),
+        invVP * glm::vec4(1, -1,  1, 1),
+        invVP * glm::vec4(1,  1,  1, 1),
+        invVP * glm::vec4(-1,  1,  1, 1)
+    };
+
+    for (size_t i = 0; i < frustumVertices.size(); ++i) {
+        frustumVertices4[i] /= frustumVertices4[i].w;
+        frustumVertices[i] = glm::vec3(frustumVertices4[i]);
+    }
+
+    return frustumVertices;
 }
