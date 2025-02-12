@@ -30,5 +30,4 @@ private:
 	std::list<std::shared_ptr<GameObject>> m_RootObjects;
 	std::shared_ptr<GameObject> m_SelectedObject = nullptr;
 };
-
 #endif // HIERARCHY_PANEL_H

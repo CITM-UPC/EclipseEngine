@@ -101,6 +101,7 @@
     <ClCompile Include="InspectorPanel.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MenuPanel.cpp" />
+    <ClCompile Include="NodeEditorPanel.cpp" />
     <ClCompile Include="PanelHandler.cpp" />
     <ClCompile Include="ResourceImporter.cpp" />
     <ClCompile Include="SettingsPanel.cpp" />
@@ -125,6 +126,7 @@
     <ClInclude Include="HierarchyPanel.h" />
     <ClInclude Include="MenuPanel.h" />
     <ClInclude Include="Module.h" />
+    <ClInclude Include="NodeEditorPanel.h" />
     <ClInclude Include="Panel.h" />
     <ClInclude Include="PanelHandler.h" />
     <ClInclude Include="ResourceImporter.h" />

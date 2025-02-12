@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include <memory> // For std::unique_ptr
+#include <memory>
 
 #include <imgui.h>
 #include "imgui_impl_glfw.h"
@@ -40,6 +40,7 @@ public:
 
     std::shared_ptr<Panel> GetPanel(const std::string& name);
 	HierarchyPanel* hierarchyPanel;
+    ViewportPanel* viewportPanel;
 
 private:
     std::vector<std::shared_ptr<Panel>> m_Panels;

@@ -19,7 +19,11 @@ void HierarchyPanel::Render()
 {
 	if (!IsVisible()) return;
 
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.1f, 0.1f, 0.1f, 1.0f));
+
 	ImGui::Begin(GetName().c_str(), &m_Visible);
+
+	ImGui::PopStyleColor();
 
 	if (core->scene != nullptr)
 	{
