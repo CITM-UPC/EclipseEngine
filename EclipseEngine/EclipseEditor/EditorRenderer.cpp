@@ -1,7 +1,7 @@
 #include "App.h"
 #include "EditorRenderer.h"
 
-EditorRenderer::EditorRenderer()
+EditorRenderer::EditorRenderer(App* application) : app(application)
 {
 	fbo = new Framebuffer(core->window->GetWidth(), core->window->GetHeight());
 }
@@ -25,6 +25,7 @@ bool EditorRenderer::Initialize()
 	optionShader = normalShader = new Shader("Shaders/normal.vert", "Shaders/normal.frag");
 	outliningShader = new Shader("Shaders/outline.vert", "Shaders/outline.frag");
 	aabbShader = new Shader("Shaders/aabb.vert", "Shaders/aabb.frag");
+	frustumShader = new Shader("Shaders/frustum.vert", "Shaders/frustum.frag");
 	glEnable(GL_CULL_FACE); // Backface culling testing
 	glEnable(GL_STENCIL_TEST); // Stencil testing
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
@@ -50,6 +51,21 @@ void EditorRenderer::BeginFrame()
 void EditorRenderer::Render(Scene* scene, Camera* editorCamera, std::shared_ptr<GameObject> selectedObject)
 {
 	if (!scene) return;
+
+	ViewportPanel* viewport = app->panelHandler->viewportPanel;
+
+	if (!viewport) {
+		std::cerr << "Error: Viewport Panel not found!" << std::endl;
+		return;
+	}
+
+	bool showSkybox = viewport->showSkybox;
+	bool showGrid = viewport->showGrid;
+	bool showGizmo = viewport->showGizmo;
+
+	if (showSkybox && scene->skybox) {
+		scene->skybox->Draw(*editorCamera);
+	}
 
 	// Normal object rendering
 	glStencilFunc(GL_ALWAYS, 1, 0xFF); // Write 1 to the stencil buffer for all objects
@@ -84,6 +100,20 @@ void EditorRenderer::Render(Scene* scene, Camera* editorCamera, std::shared_ptr<
 		}
 	}
 
+	// Ensure correct OpenGL state for drawing lines
+	glDisable(GL_DEPTH_TEST);
+	glLineWidth(1.0f);
+
+	for (const auto& gameObject : scene->GetObjects()) {
+		if (Camera* camera = gameObject->GetComponent<Camera>()) {
+			auto frustumVertices = camera->GetFrustumVertices(camera->nearPlane, camera->farPlane); // Adjust near and far planes as needed
+			DrawFrustum(frustumVertices, *frustumShader, editorCamera->GetViewMatrix(), editorCamera->GetProjectionMatrix());
+		}
+	}
+
+	glEnable(GL_DEPTH_TEST);
+	glLineWidth(1.0f);
+
 	if (selectedObject != nullptr)
 	{
 		// Calculate the world transform for the selected object
@@ -102,8 +132,15 @@ void EditorRenderer::Render(Scene* scene, Camera* editorCamera, std::shared_ptr<
 	glStencilFunc(GL_ALWAYS, 1, 0xFF); // Reset stencil function
 	glEnable(GL_DEPTH_TEST); // Re-enable depth testing
 
-	RenderGrid(grid, editorCamera);
-	RenderGuizmo();
+	// Render Grid if enabled
+	if (showGrid) {
+		RenderGrid(grid, editorCamera);
+	}
+
+	// Render Gizmo if enabled
+	if (showGizmo) {
+		RenderGuizmo();
+	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
@@ -166,5 +203,39 @@ void EditorRenderer::RenderAABB(AABB aabb, Shader& shader)
 
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);
+	glDeleteVertexArrays(1, &VAO);
+}
+
+void EditorRenderer::DrawFrustum(const std::array<glm::vec3, 8>& frustumVertices, Shader& shader, const glm::mat4& view, const glm::mat4& projection) {
+	std::vector<glm::vec3> lines = {
+		frustumVertices[0], frustumVertices[1], frustumVertices[1], frustumVertices[2],
+		frustumVertices[2], frustumVertices[3], frustumVertices[3], frustumVertices[0],
+		frustumVertices[4], frustumVertices[5], frustumVertices[5], frustumVertices[6],
+		frustumVertices[6], frustumVertices[7], frustumVertices[7], frustumVertices[4],
+		frustumVertices[0], frustumVertices[4], frustumVertices[1], frustumVertices[5],
+		frustumVertices[2], frustumVertices[6], frustumVertices[3], frustumVertices[7]
+	};
+
+	GLuint VAO, VBO;
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, lines.size() * sizeof(glm::vec3), lines.data(), GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	shader.Activate();
+	shader.SetMat4("view", view);
+	shader.SetMat4("projection", projection);
+
+	glDrawArrays(GL_LINES, 0, lines.size());
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
+	glDeleteBuffers(1, &VBO);
 	glDeleteVertexArrays(1, &VAO);
 }

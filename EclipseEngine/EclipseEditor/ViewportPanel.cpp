@@ -21,6 +21,7 @@ ViewportPanel::ViewportPanel(const std::string& name, Framebuffer* framebuffer, 
 	m_Trans = std::make_unique<Texture>("EditorResources/trans.png", "icon", 0, GL_RGBA, GL_UNSIGNED_BYTE);
     m_Rot = std::make_unique<Texture>("EditorResources/rot.png", "icon", 0, GL_RGBA, GL_UNSIGNED_BYTE);
     m_Sca = std::make_unique<Texture>("EditorResources/sca.png", "icon", 0, GL_RGBA, GL_UNSIGNED_BYTE);
+	m_Skybox = std::make_unique<Texture>("EditorResources/skybox.png", "icon", 0, GL_RGBA, GL_UNSIGNED_BYTE);
 }
 
 void ViewportPanel::Render()
@@ -120,6 +121,27 @@ void ViewportPanel::Render()
             ImGui::EndDragDropTarget();
         }
 
+        // Toggle buttons
+        ImGui::SetCursorScreenPos(ImVec2(viewportPosition.x + 600, viewportPosition.y + 15));
+
+        //if (ImGui::ImageButton(reinterpret_cast<void*>(static_cast<intptr_t>(m_Framebuffer->GetTextureID())), ImVec2(15, 15)))
+        //{
+        //    showGrid = !showGrid;
+        //}
+        //ImGui::SameLine();
+
+        if (ImGui::ImageButton(reinterpret_cast<void*>(static_cast<intptr_t>(m_Skybox->textureID)), ImVec2(20, 20)))
+        {
+            showSkybox = !showSkybox;
+        }
+        ImGui::SameLine();
+
+        //if (ImGui::ImageButton(reinterpret_cast<void*>(static_cast<intptr_t>(m_Framebuffer->GetTextureID())), ImVec2(15, 15)))
+        //{
+        //    showGizmo = !showGizmo;
+        //}
+
+
         // Function to set button colors based on the active state
         auto setActiveButtonColor = [](bool isActive) {
             if (isActive) {
@@ -189,7 +211,7 @@ void ViewportPanel::Render()
         }
 
         // Gizmo manipulation (only active if not idle)
-        if (operation != ManipulationOperation::IDLE && m_SelectedObject) 
+        if (operation != ManipulationOperation::IDLE && m_SelectedObject && showGizmo)
         {
             ImGuizmo::SetOrthographic(false);
             ImGuizmo::SetDrawlist(ImGui::GetWindowDrawList());

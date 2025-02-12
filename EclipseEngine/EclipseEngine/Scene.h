@@ -6,6 +6,7 @@
 #include "GameObject.h"
 #include "Camera.h"
 #include "ModelLoader.h"
+#include "Skybox.h"
 
 class Scene
 {
@@ -26,6 +27,7 @@ public:
 
 	void AddCube();
 
+	std::unique_ptr<Skybox> skybox;
 private:
 	std::list<std::shared_ptr<GameObject >> gameObjects;
 	Camera* activeCamera = nullptr;
