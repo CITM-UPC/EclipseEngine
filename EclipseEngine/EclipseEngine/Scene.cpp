@@ -27,7 +27,7 @@ bool Scene::Update(double dt)
 {
 	if (activeCamera)
 	{
-		activeCamera->UpdateMatrix(0.1f, 100.0f);
+		activeCamera->UpdateMatrix(activeCamera->nearPlane, activeCamera->farPlane);
 	}
 	for (auto& obj : gameObjects)
 	{
@@ -38,10 +38,9 @@ bool Scene::Update(double dt)
 
 void Scene::Draw(Shader& shader)
 {
-	for (auto& obj : gameObjects)
-	{
-		glm::mat4 identity = obj->transform.GetMatrix();
-		obj->Draw(shader, *activeCamera, identity);
+	skybox->Draw(*activeCamera);
+	for (auto& obj : gameObjects){
+		obj->Draw(shader, *activeCamera, obj->transform.GetMatrix());
 	}
 }
 

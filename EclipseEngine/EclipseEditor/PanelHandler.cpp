@@ -10,6 +10,7 @@
 #include "AssetsPanel.h"
 #include "InspectorPanel.h"
 #include "ViewportPanel.h"
+#include "NodeEditorPanel.h"
 #include "GamePanel.h"
 
 PanelHandler::PanelHandler(App* app) : app(app)
@@ -147,9 +148,9 @@ void PanelHandler::CustomStyle()
     colors[ImGuiCol_Text] = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 
     // Backgrounds
-    colors[ImGuiCol_WindowBg] = ImVec4(0.1f, 0.1f, 0.1f, 1.0f);             // Background color for main windows
-    colors[ImGuiCol_ChildBg] = ImVec4(0.1f, 0.1f, 0.1f, 1.0f);              // Background color for child windows/panels
-    colors[ImGuiCol_PopupBg] = ImVec4(0.1f, 0.1f, 0.1f, 1.0f);              // Background color for pop-up windows
+    colors[ImGuiCol_WindowBg] = ImVec4(0.15f, 0.15f, 0.15f, 1.0f);             // Background color for main windows
+    colors[ImGuiCol_ChildBg] = ImVec4(0.15f, 0.15f, 0.15f, 1.0f);              // Background color for child windows/panels
+    colors[ImGuiCol_PopupBg] = ImVec4(0.15f, 0.15f, 0.15f, 1.0f);              // Background color for pop-up windows
 
     // Headers
     colors[ImGuiCol_Header] = ImVec4(0.3f, 0.3f, 0.3f, 1.0f);               // Background color for headers (hovered or active)
@@ -158,7 +159,7 @@ void PanelHandler::CustomStyle()
 
     // Borders and separators
     colors[ImGuiCol_Border] = ImVec4(0.05f, 0.05f, 0.05f, 0.7f);            // Border color
-    colors[ImGuiCol_BorderShadow] = ImVec4(1.0f, 0.0f, 0.0f, 1.0f)  ;       // Border shadow color
+    colors[ImGuiCol_BorderShadow] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f)  ;       // Border shadow color
 
     // Buttons
     colors[ImGuiCol_Button] = ImVec4(0.4f, 0.4f, 0.4f, 1.0f);               // Button color
@@ -238,6 +239,7 @@ void PanelHandler::InitializePanels()
 	AddPanel(std::make_shared<SettingsPanel>("Settings Panel", false));
     AddPanel(std::make_shared<AssetsPanel>("Assets Panel", true));
     AddPanel(std::make_shared<InspectorPanel>("Inspector Panel", true));
+    AddPanel(std::make_shared<NodeEditorPanel>("Node Editor Panel", true));
     AddPanel(std::make_shared<GamePanel>("Game Panel", core->renderer->GetFramebuffer(), core->scene->GetActiveCamera(), true)); // this is the game viewport
     AddPanel(std::make_shared<ViewportPanel>("Viewport Panel", app->editorRenderer->GetFramebuffer(), app->editorCamera, true)); // this is the editor viewport
 
@@ -245,6 +247,8 @@ void PanelHandler::InitializePanels()
 	hierarchyPanel = static_cast<HierarchyPanel*>(GetPanel("Hierarchy Panel").get());
 	hierarchyPanel->SetInspectorPanel(static_cast<InspectorPanel*>(GetPanel("Inspector Panel").get()));
 	hierarchyPanel->SetViewportPanel(static_cast<ViewportPanel*>(GetPanel("Viewport Panel").get()));
+
+	viewportPanel = static_cast<ViewportPanel*>(GetPanel("Viewport Panel").get());
 }
 
 void PanelHandler::AddPanel(std::shared_ptr<Panel> panel) {
