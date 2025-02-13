@@ -30,6 +30,9 @@ public:
 
     void Resize(int width, int height);
 
+    bool showGrid = true;
+    bool showSkybox = true;
+    bool showGizmo = true;
 private:
     Framebuffer* m_Framebuffer;
     Camera* m_camera;
@@ -41,9 +44,11 @@ private:
     std::unique_ptr<Texture> m_Trans;
     std::unique_ptr<Texture> m_Rot;
     std::unique_ptr<Texture> m_Sca;
+	std::unique_ptr<Texture> m_Skybox;
 
     const float iconSize = 25.0f;
 	const float iconSpacing = 5.0f; //spacing between icons
+
 };
 
 #endif // VIEWPORTPANEL_H

@@ -17,9 +17,24 @@ bool Scene::Initialize()
 	cameraGO->name = "Main Camera";
 	cameraGO->AddComponent<Camera>(1500, 844, glm::vec3(7.0f, 4.0f, -7.0f));
 	SetActiveCamera(cameraGO->GetComponent<Camera>());
+	activeCamera->SetNearPlane(5.0f);
+	activeCamera->SetFarPlane(100.0f);
 	AddGameObject(cameraGO);
 	//auto initScene = modelLoader.LoadModel("Resources/Assets/fbx_files/Street/untitled.fbx");
 	//AddGameObject(initScene);
+
+	std::vector<std::string> cubemapFaces = {
+	"Resources/skybox/skybox1/right.png", "Resources/skybox/skybox1/left.png", "Resources/skybox/skybox1/top.png",
+	"Resources/skybox/skybox1/bottom.png", "Resources/skybox/skybox1/front.png", "Resources/skybox/skybox1/back.png"
+	};
+
+	//std::vector<std::string> cubemapFaces = {
+	//"Resources/skybox/skycube_1/right.bmp", "Resources/skybox/skycube_1/left.bmp", "Resources/skybox/skycube_1/top.bmp",
+	//"Resources/skybox/skycube_1/bottom.bmp", "Resources/skybox/skycube_1/front.bmp", "Resources/skybox/skycube_1/back.bmp"
+	//};
+
+	skybox = std::make_unique<Skybox>(cubemapFaces);
+
 	return true;
 }
 
