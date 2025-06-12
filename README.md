@@ -1,6 +1,7 @@
 # EclipseEngine
 A 3D game engine made from scratch by 4 university students for the Game Engines subject.
 
+![v0.9](https://github.com/CITM-UPC/EclipseEngine/blob/main/Images/v0.9.png)
 ![demo2](https://github.com/user-attachments/assets/5090b320-c296-4dca-992d-bb50cdcd8e89)
 
 ## The Team
