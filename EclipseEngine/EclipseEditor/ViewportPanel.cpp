@@ -22,13 +22,14 @@ ViewportPanel::ViewportPanel(const std::string& name, Framebuffer* framebuffer, 
     m_Rot = std::make_unique<Texture>("EditorResources/rot.png", "icon", 0, GL_RGBA, GL_UNSIGNED_BYTE);
     m_Sca = std::make_unique<Texture>("EditorResources/sca.png", "icon", 0, GL_RGBA, GL_UNSIGNED_BYTE);
 	m_Skybox = std::make_unique<Texture>("EditorResources/skybox.png", "icon", 0, GL_RGBA, GL_UNSIGNED_BYTE);
+	m_Grid = std::make_unique<Texture>("EditorResources/grid.png", "icon", 0, GL_RGBA, GL_UNSIGNED_BYTE);
 }
 
 void ViewportPanel::Render()
 {
     if (IsVisible())
     {
-        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse/* | ImGuiWindowFlags_NoMove*/;
+        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoScrollbar/* | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoMove*/;
         ImGui::Begin("Viewport", nullptr, windowFlags);
 
         bool isViewportHovered = ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup);
@@ -124,23 +125,22 @@ void ViewportPanel::Render()
         // Toggle buttons
         ImGui::SetCursorScreenPos(ImVec2(viewportPosition.x + 600, viewportPosition.y + 15));
 
-        //if (ImGui::ImageButton(reinterpret_cast<void*>(static_cast<intptr_t>(m_Framebuffer->GetTextureID())), ImVec2(15, 15)))
-        //{
-        //    showGrid = !showGrid;
-        //}
-        //ImGui::SameLine();
+        if (ImGui::ImageButton(reinterpret_cast<void*>(static_cast<intptr_t>(m_Grid->textureID)), ImVec2(15, 15)))
+        {
+            showGrid = !showGrid;
+        }
+        ImGui::SameLine();
 
-        if (ImGui::ImageButton(reinterpret_cast<void*>(static_cast<intptr_t>(m_Skybox->textureID)), ImVec2(20, 20)))
+        if (ImGui::ImageButton(reinterpret_cast<void*>(static_cast<intptr_t>(m_Skybox->textureID)), ImVec2(15, 15)))
         {
             showSkybox = !showSkybox;
         }
         ImGui::SameLine();
 
-        //if (ImGui::ImageButton(reinterpret_cast<void*>(static_cast<intptr_t>(m_Framebuffer->GetTextureID())), ImVec2(15, 15)))
-        //{
-        //    showGizmo = !showGizmo;
-        //}
-
+        if (ImGui::ImageButton(reinterpret_cast<void*>(static_cast<intptr_t>(m_Framebuffer->GetTextureID())), ImVec2(15, 15)))
+        {
+            showGizmo = !showGizmo;
+        }
 
         // Function to set button colors based on the active state
         auto setActiveButtonColor = [](bool isActive) {

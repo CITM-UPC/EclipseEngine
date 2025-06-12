@@ -40,11 +40,18 @@ void MenuPanel::Render() {
 				m_PanelHandler.TogglePanel("Hierarchy Panel");
 			}
 
-			// Toggle for the Hierarchy panel
+			// Toggle for the Console panel
 			bool isConsolePanelVisible = m_PanelHandler.GetPanelVisibility("Console Panel");
 			ImGui::MenuItem("Console Panel", nullptr, &isConsolePanelVisible);
 			if (ImGui::IsItemClicked()) {
 				m_PanelHandler.TogglePanel("Console Panel");
+			}
+
+			// Toggle node editor
+			bool isNodePanelVisible = m_PanelHandler.GetPanelVisibility("Node Editor Panel");
+			ImGui::MenuItem("Node Editor Panel", nullptr, &isNodePanelVisible);
+			if (ImGui::IsItemClicked()) {
+				m_PanelHandler.TogglePanel("Node Editor Panel");
 			}
 
             ImGui::EndMenu();

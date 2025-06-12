@@ -14,6 +14,7 @@ public:
     static void Init(const std::string& filename = "log.txt");
     static void Log(const std::string& message);
     static void Log(const std::string& message, const std::string& item);
+    static void Log(const std::string& message, int item);
     static void SetCallback(LogCallback callback); // callback
     static void Close();
 

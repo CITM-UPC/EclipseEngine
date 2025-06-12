@@ -45,6 +45,7 @@ private:
     std::unique_ptr<Texture> m_Rot;
     std::unique_ptr<Texture> m_Sca;
 	std::unique_ptr<Texture> m_Skybox;
+    std::unique_ptr<Texture> m_Grid;
 
     const float iconSize = 25.0f;
 	const float iconSpacing = 5.0f; //spacing between icons

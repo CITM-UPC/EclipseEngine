@@ -74,7 +74,7 @@ void App::AddModule(Module* module, bool activate)
 
 bool App::PreUpdate()
 {
-	editorCamera->UpdateMatrix(0.1f, 200.0f);
+	editorCamera->UpdateMatrix(0.1f, 1000.0f);
 	for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{
 		if ((*it)->active == false) continue;
